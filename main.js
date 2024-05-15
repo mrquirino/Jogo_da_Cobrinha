@@ -74,3 +74,34 @@ function hasCollisions() {
         c => c.x === head.x && c.y === head.y
     )
 }
+
+function snakeContains(cell) {
+    return snake.find(c => c.x == cell.x && c.y == cell.y)
+}
+
+function headMeetsFood() {
+    const head = snake[0]
+    return food && (head.x == food.x && head.y === food.y)
+}
+
+function moveSnake() {
+    const head = snake[0]
+    const next = Object.assign({}, head)
+
+    switch(direction) {
+        case DIR.LEFT:
+            --next.x;
+            break;
+        case DIR.UP:
+            --next.y;
+            break;
+        case DIR.RIGHT:
+            ++next.x;
+            break;
+        case DIR.DOWN:
+            ++next.y
+            break;
+    }
+
+    if (next.x >= cellsNo) next.x = 0
+}
