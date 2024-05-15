@@ -104,4 +104,56 @@ function moveSnake() {
     }
 
     if (next.x >= cellsNo) next.x = 0
+    if (next.y >= cellsNo) next.y = 0
+    if (next.x < 0) next.x = cellsNo -1
+    if (next.y < 0) next.y = cellsNo -1
+
+    if (!needsGrowth) {
+        snake.pop()
+    }
+
+    needsGrowth = false
+    snake.unshift(next);
+}
+
+function putFood() {
+    do {
+        food = {
+            x: ~~(Math.random() * (cellsNo - 1)),
+            y: ~~(Math.random() * (cellsNo - 1))
+        }
+    } while (snakeContains(food))
+        lastFood = tick
+}
+
+function draw() {
+    ctx.clearRect(0, 0, 400, 400)
+    drawCells()
+    drawFood()
+    if (flash && ~~ (Data.now() / 100) % 2 === 0) {
+        return
+    }
+    drawSnake()
+}
+
+function drawCells() {
+    for (var i = 0; i < cellsNo; ++i)
+        for (var j = 0; j < cellsNo; ++j)
+            drawCell(i, j)
+}
+
+function drawFood() {
+    if (food) {
+        ctx.fillStyle = '#4fc3f7'
+        fillCell(food.x, food.y)
+        ctx.fillStyle = '#fff'  
+    }
+}
+
+function drawCell(i, j) {
+    ctx.strokeRect(
+        i * cellSize,
+        j * cellSize,
+        cellSize, cellSize
+    )
 }
