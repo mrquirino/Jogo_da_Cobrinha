@@ -157,3 +157,114 @@ function drawCell(i, j) {
         cellSize, cellSize
     )
 }
+
+function drawSnake() {
+    snake.forEach(
+        ({x, y}) => fillCell(x, y)
+    )
+}
+
+function fillCell(x, y) {
+    ctx.beginPath()
+    ctx.rect(
+        x * cellSize,
+        y * cellSize,
+        cellSize, cellSize
+    )
+
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+}
+
+function setScore(next) {
+    score = next
+    scoreval.textContent = score
+}
+
+function startGame() {
+    btnStart.textContent = 'restart'
+    flash = false
+    lastKeyPressed = null
+    food = null
+    setScore(0)
+    direction = DIR.LEFT
+    lastFood = lastUpdate = Date.now()
+    paused = false
+    setTimeout(putFood, 1000)
+    const startX = cellsNo/2
+    snake = [startX, startX+1, startX+2, startX+3].map(
+        x => ({x,y: 15})
+    )
+}
+
+function loo() {
+    requestAnimationFrame(loop)
+    draw()
+
+    if (paused) return
+    update()
+}
+
+requestAnimationFrame(loop)
+
+btnStart.addEventListener('click', startGame)
+btnPause.addEventListener('click', pause)
+
+function pause() {
+    pause = !paused
+    btnPause.textContent = paused ? 'resume' : 'pause'
+}
+
+window.addEventListener('keydown', onKeyDown)
+function onKeyDown({keyCode}) {
+    switch (true) {
+        case (keyCode === DIR.DOWN && direction === DIR.UP):
+        case (keyCode === DIR.UP && direction === DIR.DOWN):
+        case (keyCode === DIR.LEFT && direction === DIR.RIGHT):
+        case (keyCode === DIR.RIGHT && direction === DIR.LEFT):
+            return
+    }
+
+    lastKeyPressed = keyCode
+}
+
+function setDirection(keyCode) {
+    direction = keyCode
+}
+
+function checkFood() {
+    if (!food) return
+
+    if (food.x >= cellsNo){
+        food.x = cellsNo -1
+    }
+
+    if (food.y >= cellsNo) {
+        food.y = cellsNo -1
+    }
+}
+
+class RangeSlider {
+    constructor(el, cb) {
+        this.input = el.querySelector('input')
+        this.slider = el.querySelector('.Range_inputSlider')
+        this.value = el.querySelector('.range_inputValue')
+
+        this.input.addEventListener('input', _=> this.onChange())
+        this.input.addEventListener('keydown', e =>{
+            e.preventDefault()
+        })
+
+        this.onChangeCallback = cb
+        this.onChange()
+    }
+
+    onChange(){
+        this.value.textContent = this.input.value
+        this.slider.style.transform = 'scalex(${(this.input.value / this.input.step) / 10})'
+        this.onChangeCallback(this.input.value)
+    }
+}
+
+
