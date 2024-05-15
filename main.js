@@ -198,7 +198,7 @@ function startGame() {
     )
 }
 
-function loo() {
+function loop() {
     requestAnimationFrame(loop)
     draw()
 
@@ -248,7 +248,7 @@ function checkFood() {
 class RangeSlider {
     constructor(el, cb) {
         this.input = el.querySelector('input')
-        this.slider = el.querySelector('.Range_inputSlider')
+        this.slider = el.querySelector('.range_inputSlider')
         this.value = el.querySelector('.range_inputValue')
 
         this.input.addEventListener('input', _=> this.onChange())
@@ -262,7 +262,7 @@ class RangeSlider {
 
     onChange(){
         this.value.textContent = this.input.value
-        this.slider.style.transform = 'scalex(${(this.input.value / this.input.step) / 10})'
+        this.slider.style.transform =  'scaleX(${(this.input.value / this.input.step) / 10})'
         this.onChangeCallback(this.input.value)
     }
 }
@@ -276,7 +276,7 @@ new RangeSlider(
 new RangeSlider(
     document.querySelector('.range-columns'),
     value => {
-        cellsNo = Nuber(value)
+        cellsNo = Number(value)
         cellSize = 400 / cellsNo
         checkFood()
     }
@@ -309,7 +309,7 @@ function onTouchEnd() {
     if(keyCode) onKeyDown({keyCode})
 }
 
-function toucheToKeyCode(x, y) {
+function touchToKeyCode(x, y) {
     if(Math.abs(x) > Math.abs(y)) {
         if (x < -1) {
             keyCode - DIR.RIGHT
